@@ -173,6 +173,14 @@ def test_review_cannot_precede_draft_creation(session):
     expect_error(session, [api_event(early)], "EVENT_BEFORE_DRAFT_CREATED")
 
 
+def test_review_submitted_must_be_strictly_after_draft_creation(session):
+    submit_review_events(session, ORG_A, [api_event(draft_row())])
+    same = submitted_row()
+    same["occurred_at"] = BASE_TIME
+    expect_error(session, [api_event(same)], "EVENT_BEFORE_DRAFT_CREATED")
+    assert count_events(session) == 1
+
+
 def test_batch_is_ordered_by_event_type(session):
     # Caller sends terminal, opened and creation events in reverse order.
     events = [api_event(submitted_row()), api_event(opened_row()), api_event(draft_row())]
@@ -211,6 +219,14 @@ def test_expired_event_must_be_seven_days_late(session):
     assert count_events(session) == 1
 
 
+def test_expired_event_must_be_more_than_seven_days_late(session):
+    submit_review_events(session, ORG_A, [api_event(draft_row())])
+    exact = expired_row()
+    exact["occurred_at"] = BASE_TIME + timedelta(days=7)
+    expect_error(session, [api_event(exact)], "DRAFT_NOT_EXPIRED")
+    assert count_events(session) == 1
+
+
 def test_batch_is_atomic(session):
     good = api_event(draft_row(id=uuid.uuid4(), draft_id=uuid.uuid4()))
     bad = api_event(submitted_row())
@@ -244,6 +260,22 @@ def test_expire_stale_drafts_is_deterministic_and_idempotent(session):
     assert row.event_type == EVENT_DRAFT_EXPIRED
     assert row.draft_id == DRAFT
     assert expire_stale_drafts(session, ORG_A, now=now + timedelta(hours=1)) == []
+    assert count_events(session) == 2
+
+
+def test_expire_stale_drafts_does_not_expire_exactly_seven_days(session):
+    submit_review_events(session, ORG_A, [api_event(draft_row())])
+    assert expire_stale_drafts(session, ORG_A, now=BASE_TIME + timedelta(days=7)) == []
+    assert count_events(session) == 1
+
+
+def test_expire_stale_drafts_ignores_opened_drafts(session):
+    submit_review_events(
+        session,
+        ORG_A,
+        [api_event(draft_row()), api_event(opened_row())],
+    )
+    assert expire_stale_drafts(session, ORG_A, now=BASE_TIME + timedelta(days=8)) == []
     assert count_events(session) == 2
 
 

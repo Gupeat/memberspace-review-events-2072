@@ -1,8 +1,8 @@
 # Acceptance report · #2072
 
-- Generated: 2026-11-20T05:51:53Z
+- Generated: 2026-11-20T18:44:27Z
 - Database: SQLite quick regression; PostgreSQL 16 evidence in artifacts/pg16/
-- Tests: 58 passed
+- Tests: 62 passed
 - AC1 batch limit (101 rejected, 100 persisted): PASS
 - AC2 event_id idempotency: PASS
 - AC3 one terminal event per draft: PASS

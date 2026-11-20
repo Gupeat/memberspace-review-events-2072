@@ -1,3 +1,4 @@
+# recorded_at 2026-11-20T18:39:42Z
 INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
 INFO  [alembic.runtime.migration] Will assume transactional DDL.
 INFO  [alembic.runtime.migration] Running downgrade 0001_ai_review_events -> , AI review events and reject-reason dictionary.

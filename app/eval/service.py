@@ -326,6 +326,12 @@ def submit_review_events(
                         "DRAFT_NOT_FOUND",
                         f"draft {event.draft_id} has no ai_draft_created event",
                     )
+                same_instant = _utc(event.occurred_at) == _utc(created.occurred_at)
+                if event.event_type == EVENT_REVIEW_SUBMITTED and same_instant:
+                    raise invalid(
+                        "EVENT_BEFORE_DRAFT_CREATED",
+                        f"event {event.event_id} must be later than the draft creation event",
+                    )
                 if _utc(event.occurred_at) < _utc(created.occurred_at):
                     raise invalid(
                         "EVENT_BEFORE_DRAFT_CREATED",
@@ -352,10 +358,10 @@ def submit_review_events(
                 if event.event_type == EVENT_DRAFT_EXPIRED:
                     assert created is not None
                     elapsed = _utc(event.occurred_at) - _utc(created.occurred_at)
-                    if elapsed < timedelta(days=EXPIRY_DAYS):
+                    if elapsed <= timedelta(days=EXPIRY_DAYS):
                         raise invalid(
                             "DRAFT_NOT_EXPIRED",
-                            f"draft {event.draft_id} expires only after {EXPIRY_DAYS} days",
+                            f"draft {event.draft_id} expires only after more than {EXPIRY_DAYS} days",
                         )
             elif event.event_type in (EVENT_REVIEW_OPENED, EVENT_REVIEW_SUBMITTED):
                 if _find_terminal(session, org_id, event.draft_id) is not None:
@@ -422,7 +428,7 @@ def expire_stale_drafts(
                 AiReviewEvent.org_id == org_id,
                 AiReviewEvent.event_type == EVENT_DRAFT_CREATED,
                 AiReviewEvent.deleted_at.is_(None),
-                AiReviewEvent.occurred_at <= cutoff,
+                AiReviewEvent.occurred_at < cutoff,
             )
         ).scalars()
     )
@@ -430,6 +436,10 @@ def expire_stale_drafts(
     try:
         for created in created_rows:
             if _find_terminal(session, org_id, created.draft_id) is not None:
+                continue
+            if _latest_opened(session, org_id, created.draft_id) is not None:
+                # A reviewer opened the draft, so it is being handled.  The
+                # expiry job only targets drafts with no review activity.
                 continue
             event_id = _expired_event_id(org_id, created.draft_id)
             if session.get(AiReviewEvent, event_id) is not None:

@@ -85,7 +85,10 @@ def main() -> int:
 
     def record(name: str, code: int, output: str) -> None:
         steps.append((name, code, output))
-        (out_dir / f"{len(steps)-1:02d}-{name}.log").write_text(output, encoding="utf-8")
+        stamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        (out_dir / f"{len(steps)-1:02d}-{name}.log").write_text(
+            f"# recorded_at {stamp}\n{output}", encoding="utf-8"
+        )
 
     record("reset", *psql("DROP SCHEMA public CASCADE; CREATE SCHEMA public;", env))
     record("upgrade-head", *run([sys.executable, "-m", "alembic", "upgrade", "head"], env))

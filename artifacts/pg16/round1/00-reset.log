@@ -1,6 +1,7 @@
+# recorded_at 2026-11-20T18:38:20Z
 DROP SCHEMA
 CREATE SCHEMA
 NOTICE:  drop cascades to 3 other objects
 DETAIL:  drop cascades to table alembic_version
-drop cascades to table ai_reject_reason
 drop cascades to table ai_review_event
+drop cascades to table ai_reject_reason

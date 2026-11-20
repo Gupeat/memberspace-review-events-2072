@@ -23,7 +23,7 @@ adoption rate, edit magnitude and rejection-reason analytics.
 | docs/EVENT-SPEC.md | Event contract, state machine, metric definitions |
 | docs/REJECT-REASONS.md | Reject-reason dictionary |
 | scripts/ | Acceptance, PostgreSQL evidence, DDL export, mutation drill |
-| tests/ | 58 pytest tests (migration, constraints, service, HTTP) |
+| tests/ | 62 pytest tests (migration, constraints, service, HTTP) |
 
 ## Quick start
 
@@ -76,9 +76,9 @@ Errors are always `{"code": "...", "message": "..."}`:
 | 422 | DRAFT_NOT_FOUND | Review event before the draft creation event |
 | 422 | EVENT_BEFORE_DRAFT_CREATED | Event timestamp is earlier than the creation event |
 | 422 | EVENT_BEFORE_REVIEW_OPENED | Terminal event timestamp is earlier than the latest review_opened |
-| 422 | DRAFT_NOT_EXPIRED | draft_expired before the 7-day window |
-| 422 | DRAFT_ALREADY_EXISTS | More than one creation event for a draft |
-| 422 | REJECT_REASON_INVALID | Code missing or inactive in the dictionary |
+| 422 | DRAFT_NOT_EXPIRED | draft_expired not more than 7 days after creation |
+| 409 | DRAFT_ALREADY_EXISTS | More than one creation event for a draft |
+| 422 | REJECT_REASON_INVALID | Unknown or inactive reject_reason_code |
 | 422 | OTHER_NOTE_REQUIRED | `other` without a non-empty note |
 | 422 | REQUEST_INVALID / ORG_INVALID / ACTOR_INVALID | Malformed JSON or identifier header |
 | 409 | DRAFT_ALREADY_TERMINAL | A draft already has review_submitted or draft_expired |
@@ -98,9 +98,10 @@ collapsed the same way.
 
 Events in a batch are ordered by type (creation, opened, terminal) and then by
 `occurred_at`, so callers may send the three events of one review in any order.
-Timestamps still have to be logically consistent: a review must be at or after
-draft creation, a terminal event must not be earlier than the latest
-`review_opened`, and `draft_expired` must be at least 7 days after creation.
+Timestamps still have to be logically consistent: `review_opened` must not be
+earlier than draft creation, `review_submitted` must be strictly later, a
+terminal event must not be earlier than the latest `review_opened`, and
+`draft_expired` must be more than 7 days after creation.
 
 ## Python function
 
@@ -160,7 +161,7 @@ terminal event is skipped.
 ## Tests and evidence
 
 ```bash
-python -m pytest -q tests            # 58 passed (SQLite)
+python -m pytest -q tests            # 62 passed (SQLite)
 python scripts/run_acceptance.py     # AC1-AC4 + full regression
 python scripts/export_pg_ddl.py      # artifacts/schema-postgres.sql
 python scripts/run_pg16_round.py --label round1

@@ -1,12 +1,12 @@
 {
   "ok": true,
-  "passed": 58,
+  "passed": 62,
   "ac1": true,
   "ac2": true,
   "ac3": true,
   "ac4": true,
   "full": true,
-  "generated_at": "2026-11-20T05:51:53Z",
+  "generated_at": "2026-11-20T18:44:27Z",
   "steps": [
     {
       "name": "AC1 migration upgrade head",

@@ -58,8 +58,9 @@ HTTP 409 `DRAFT_ALREADY_TERMINAL`.
 
 ### draft_expired
 
-Emitted by the expiry job for a draft that has had no terminal event for at
-least 7 days after creation. It is a terminal event. The job uses a
+Emitted by the expiry job for a draft that still has no terminal event more
+than 7 days after creation. Drafts with a `review_opened` event are skipped,
+because a reviewer is already handling them. It is a terminal event. The job uses a
 deterministic UUID v5 from (org_id, draft_id), so repeated runs and retries are
 idempotent. It never deletes the draft.
 
@@ -70,7 +71,7 @@ ai_draft_created ──> review_opened ──> review_submitted
         │                                    ▲
         ├──────────── direct submit ─────────┘
         │
-        └────────────── 7 days ──────────────> draft_expired
+        └───────────── > 7 days ────────────> draft_expired
 ```
 
 `review_opened` is optional; a reviewer may submit directly after creation.
@@ -79,8 +80,8 @@ ai_draft_created ──> review_opened ──> review_submitted
 - The only legal terminal events are `review_submitted` and `draft_expired`.
 - A draft has at most one live creation event and at most one live terminal
   event.
-- A review event must be at or after creation.
-- `draft_expired` must be at least 7 days after creation.
+- `review_opened` must not be earlier than creation; `review_submitted` must be strictly later.
+- `draft_expired` must be more than 7 days after creation.
 - Soft-deleting a row removes it from both partial unique indexes; a deleted
   draft can be recreated.
 
@@ -117,7 +118,7 @@ ai_draft_created ──> review_opened ──> review_submitted
 All failures return `{"code": "...", "message": "..."}`:
 
 - 422: malformed batch, invalid field, missing draft, invalid dictionary code,
-  other without note, expiry before 7 days, duplicate creation.
+  other without note, expiry at or before 7 days, duplicate creation.
 - 409: duplicate terminal event, event_id reuse with a different payload.
 
 ## Compatibility

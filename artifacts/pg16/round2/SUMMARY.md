@@ -1,8 +1,8 @@
 # PostgreSQL 16 acceptance · round2
 
 - PostgreSQL: 16.15 at 127.0.0.1:55432 / database clawhunt_2072
-- Generated: 2026-11-20T05:53:31Z
-- Tests: 58 passed (SQLite + PostgreSQL)
+- Generated: 2026-11-20T18:39:44Z
+- Tests: 62 passed (SQLite + PostgreSQL)
 - Alembic check: PASS
 - Tables after upgrade: PASS
 - Tables after downgrade: PASS

@@ -1,3 +1,4 @@
+# recorded_at 2026-11-20T18:39:44Z
              indexname             |                                                                                                                                indexdef                                                                                                                                 
 -----------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
  uq_ai_review_event_draft_created  | CREATE UNIQUE INDEX uq_ai_review_event_draft_created ON public.ai_review_event USING btree (org_id, draft_id) WHERE (((event_type)::text = 'ai_draft_created'::text) AND (deleted_at IS NULL))
