@@ -1,0 +1,67 @@
+mutations=3 detected=3
+other_requires_note CHECK removed: DETECTED (exit 1)
+ 'org_id': UUID('00000000-0000-0000-0000-000000001f41'), 'site_id': UUID('00000000-0000-0000-0000-000000001f43'), 'event_type': 'review_submitted', ...}
+
+    def _reject(session, row):
+>       with pytest.raises(IntegrityError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE IntegrityError
+
+tests\test_constraints.py:26: Failed
+---------------------------- Captured stderr setup ----------------------------
+INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 0001_ai_review_events, AI review events and reject-reason dictionary.
+-------------------------- Captured stderr teardown ---------------------------
+INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+INFO  [alembic.runtime.migration] Running downgrade 0001_ai_review_events -> , AI review events and reject-reason dictionary.
+=========================== short test summary info ===========================
+FAILED tests/test_constraints.py::test_other_reason_requires_note - Failed: D...
+1 failed in 0.76s
+
+terminal partial unique index removed: DETECTED (exit 1)
+())
+
+tests\test_constraints.py:70: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+session = <sqlalchemy.orm.session.Session object at 0x00000156AE1FB2C0>
+row = {'id': UUID('2a3f80c8-319a-4532-bc1f-162bf2c6dbdd'), 'org_id': UUID('00000000-0000-0000-0000-000000001f41'), 'site_id': UUID('00000000-0000-0000-0000-000000001f43'), 'event_type': 'draft_expired', ...}
+
+    def _reject(session, row):
+>       with pytest.raises(IntegrityError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE IntegrityError
+
+tests\test_constraints.py:26: Failed
+---------------------------- Captured stderr setup ----------------------------
+INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 0001_ai_review_events, AI review events and reject-reason dictionary.
+=========================== short test summary info ===========================
+FAILED tests/test_constraints.py::test_second_terminal_event_is_rejected - Fa...
+ERROR tests/test_constraints.py::test_second_terminal_event_is_rejected - sql...
+1 failed, 1 error in 1.02s
+
+dictionary activation check removed: DETECTED (exit 1)
+ccurred_at': '2026-11-01T12:00:00+00:00', 'action': 'rejected', ...}]
+code = 'REJECT_REASON_INVALID', status = 422
+
+    def expect_error(session, events, code, status=422):
+>       with pytest.raises(ReviewEventError) as caught:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ReviewEventError
+
+tests\test_service.py:45: Failed
+---------------------------- Captured stderr setup ----------------------------
+INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 0001_ai_review_events, AI review events and reject-reason dictionary.
+-------------------------- Captured stderr teardown ---------------------------
+INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+INFO  [alembic.runtime.migration] Running downgrade 0001_ai_review_events -> , AI review events and reject-reason dictionary.
+=========================== short test summary info ===========================
+FAILED tests/test_service.py::test_inactive_reason_is_rejected - Failed: DID ...
+1 failed in 0.88s

@@ -1,0 +1,52 @@
+{
+  "ok": true,
+  "passed": 58,
+  "ac1": true,
+  "ac2": true,
+  "ac3": true,
+  "ac4": true,
+  "full": true,
+  "generated_at": "2026-11-20T05:51:53Z",
+  "steps": [
+    {
+      "name": "AC1 migration upgrade head",
+      "command": "<home>\\.dsh\\dsh-runtimes\\dsh-primary-runtime\\dependencies\\python\\python.exe -m alembic upgrade head",
+      "exit": 0
+    },
+    {
+      "name": "AC1 101 events rejected / 100 persisted",
+      "command": "<home>\\.dsh\\dsh-runtimes\\dsh-primary-runtime\\dependencies\\python\\python.exe -m pytest -q tests/test_api.py -k ac1_",
+      "exit": 0
+    },
+    {
+      "name": "AC1 Python function batch limit",
+      "command": "<home>\\.dsh\\dsh-runtimes\\dsh-primary-runtime\\dependencies\\python\\python.exe -m pytest -q tests/test_service.py -k ac1_",
+      "exit": 0
+    },
+    {
+      "name": "AC2 event_id idempotency",
+      "command": "<home>\\.dsh\\dsh-runtimes\\dsh-primary-runtime\\dependencies\\python\\python.exe -m pytest -q tests/test_api.py -k ac2_",
+      "exit": 0
+    },
+    {
+      "name": "AC2 service-level idempotency",
+      "command": "<home>\\.dsh\\dsh-runtimes\\dsh-primary-runtime\\dependencies\\python\\python.exe -m pytest -q tests/test_service.py -k ac2_",
+      "exit": 0
+    },
+    {
+      "name": "AC3 second terminal returns 409",
+      "command": "<home>\\.dsh\\dsh-runtimes\\dsh-primary-runtime\\dependencies\\python\\python.exe -m pytest -q tests -k terminal",
+      "exit": 0
+    },
+    {
+      "name": "AC4 other reject reason requires note",
+      "command": "<home>\\.dsh\\dsh-runtimes\\dsh-primary-runtime\\dependencies\\python\\python.exe -m pytest -q tests -k other",
+      "exit": 0
+    },
+    {
+      "name": "Full regression",
+      "command": "<home>\\.dsh\\dsh-runtimes\\dsh-primary-runtime\\dependencies\\python\\python.exe -m pytest -q tests",
+      "exit": 0
+    }
+  ]
+}

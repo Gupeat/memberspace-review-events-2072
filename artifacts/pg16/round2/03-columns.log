@@ -1,0 +1,28 @@
+      column_name       |        data_type         | is_nullable 
+------------------------+--------------------------+-------------
+ id                     | uuid                     | NO
+ org_id                 | uuid                     | NO
+ site_id                | uuid                     | YES
+ event_type             | character varying        | NO
+ tool                   | character varying        | YES
+ scenario               | character varying        | YES
+ draft_id               | uuid                     | NO
+ prompt_version         | character varying        | YES
+ model_profile          | character varying        | YES
+ output_chars           | integer                  | YES
+ structured_field_count | integer                  | YES
+ action                 | character varying        | YES
+ final_ref              | character varying        | YES
+ final_hash             | character varying        | YES
+ reviewer_id            | uuid                     | YES
+ review_seconds         | integer                  | YES
+ reject_reason_code     | character varying        | YES
+ reject_reason_note     | character varying        | YES
+ occurred_at            | timestamp with time zone | NO
+ received_at            | timestamp with time zone | NO
+ created_at             | timestamp with time zone | NO
+ created_by             | uuid                     | YES
+ updated_at             | timestamp with time zone | NO
+ deleted_at             | timestamp with time zone | YES
+(24 rows)
+

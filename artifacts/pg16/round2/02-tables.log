@@ -1,0 +1,7 @@
+    table_name    
+------------------
+ ai_reject_reason
+ ai_review_event
+ alembic_version
+(3 rows)
+

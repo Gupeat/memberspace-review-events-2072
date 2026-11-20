@@ -1,0 +1,6 @@
+             indexname             |                                                                                                                                indexdef                                                                                                                                 
+-----------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ uq_ai_review_event_draft_created  | CREATE UNIQUE INDEX uq_ai_review_event_draft_created ON public.ai_review_event USING btree (org_id, draft_id) WHERE (((event_type)::text = 'ai_draft_created'::text) AND (deleted_at IS NULL))
+ uq_ai_review_event_draft_terminal | CREATE UNIQUE INDEX uq_ai_review_event_draft_terminal ON public.ai_review_event USING btree (org_id, draft_id) WHERE (((event_type)::text = ANY ((ARRAY['review_submitted'::character varying, 'draft_expired'::character varying])::text[])) AND (deleted_at IS NULL))
+(2 rows)
+

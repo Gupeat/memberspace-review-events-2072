@@ -1,0 +1,11 @@
+       code       | label_zh | requires_note | sort_order | active 
+------------------+----------+---------------+------------+--------
+ factual_error    | 事实错误 | f             |         10 | t
+ off_tone         | 语气不符 | f             |         20 | t
+ missing_info     | 信息缺失 | f             |         30 | t
+ policy_violation | 违反规范 | f             |         40 | t
+ duplicate        | 重复     | f             |         50 | t
+ not_needed       | 不需要   | f             |         60 | t
+ other            | 其他     | t             |         70 | t
+(7 rows)
+

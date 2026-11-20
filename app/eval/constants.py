@@ -1,0 +1,43 @@
+"""Enumerations and limits for AI review events."""
+from __future__ import annotations
+
+EVENT_DRAFT_CREATED = "ai_draft_created"
+EVENT_REVIEW_OPENED = "review_opened"
+EVENT_REVIEW_SUBMITTED = "review_submitted"
+EVENT_DRAFT_EXPIRED = "draft_expired"
+
+EVENT_TYPES = (
+    EVENT_DRAFT_CREATED,
+    EVENT_REVIEW_OPENED,
+    EVENT_REVIEW_SUBMITTED,
+    EVENT_DRAFT_EXPIRED,
+)
+TERMINAL_EVENT_TYPES = (EVENT_REVIEW_SUBMITTED, EVENT_DRAFT_EXPIRED)
+
+ACTION_ADOPTED_AS_IS = "adopted_as_is"
+ACTION_ADOPTED_WITH_EDITS = "adopted_with_edits"
+ACTION_REJECTED = "rejected"
+ACTIONS = (ACTION_ADOPTED_AS_IS, ACTION_ADOPTED_WITH_EDITS, ACTION_REJECTED)
+
+REJECT_REASON_CODES = (
+    "factual_error",
+    "off_tone",
+    "missing_info",
+    "policy_violation",
+    "duplicate",
+    "not_needed",
+    "other",
+)
+REJECT_REASON_OTHER = "other"
+
+BATCH_MAX = 100
+EXPIRY_DAYS = 7
+FINAL_HASH_LENGTH = 64
+MAX_REVIEW_SECONDS = 86400
+MAX_NOTE_LENGTH = 500
+MAX_FINAL_REF_LENGTH = 512
+MAX_TOOL_LENGTH = 64
+MAX_PROMPT_VERSION_LENGTH = 64
+MAX_MODEL_PROFILE_LENGTH = 64
+
+GLOBAL_ORG_ID = "00000000-0000-0000-0000-000000000000"
